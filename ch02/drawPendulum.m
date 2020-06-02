@@ -25,6 +25,7 @@ function handle = drawPendulum(u)
         base_handle = drawBase(y, width, height, gap, [], 'normal');
         rod_handle = drawRod(y, theta, L, gap, height, [], 'normal');
         axis([-track_width, track_width, -L, 2*track_width-L]);
+        grid;
     % at every other time step, redraw base and rod
     else
         drawBase(y, width, height, gap, base_handle);
