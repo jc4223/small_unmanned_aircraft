@@ -12,7 +12,7 @@ function handle = drawPendulum(u)
     
     %define persistent variables
     persistent base_handle
-    persistnet rod_handle
+    persistent rod_handle
     
     % first time function is called, initialize plot
     % and peersistent vars
