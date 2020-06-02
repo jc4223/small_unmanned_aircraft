@@ -1,4 +1,4 @@
-function handle = drawRod(y, width, height, gap, handle, mode)
+function handle = drawRod(y, theta, L, gap, height, handle, mode)
     X = [y, y+L*sin(theta)];
     Y = [gap+height, gap+height + L*cos(theta)];
     if isempty(handle),

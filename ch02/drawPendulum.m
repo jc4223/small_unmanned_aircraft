@@ -1,4 +1,5 @@
 function handle = drawPendulum(u)
+    display(u)
     % process inputs to function
     y		= u(1);
     theta	= u(2);
@@ -8,7 +9,7 @@ function handle = drawPendulum(u)
     L = 1;
     gap = 0.01;
     width = 1.0;
-    height = 0.1;;
+    height = 0.1;
     
     %define persistent variables
     persistent base_handle
