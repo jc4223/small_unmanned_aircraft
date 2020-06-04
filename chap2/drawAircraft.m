@@ -1,5 +1,4 @@
 function drawAircraftt(uu)
-
     % process inputs to function
     pn       = uu(1);       % inertial North position     
     pe       = uu(2);       % inertial East position

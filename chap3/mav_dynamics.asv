@@ -203,7 +203,7 @@ sys = [];
 %=============================================================================
 %
 function sys=mdlOutputs(t,x)
-    [phi, theta, psi] = Quaternion2Euler([x(7), x(8), x(9), x(10)]);
+    [phi, thetaQuaternion2Euler();
     y = [...
         x(1);
         x(2);
@@ -211,12 +211,12 @@ function sys=mdlOutputs(t,x)
         x(4);
         x(5);
         x(6);
-        phi;
-        theta;
-        psi;
+        x(7);
+        x(8);
+        x(9);
+        x(10);
         x(11);
         x(12);
-        x(13);
         ];
 sys = y;
 
