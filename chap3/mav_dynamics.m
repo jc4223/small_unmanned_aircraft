@@ -66,7 +66,7 @@ function [sys,x0,str,ts,simStateCompliance]=mdlInitializeSizes(MAV)
 %
 sizes = simsizes;
 
-sizes.NumContStates  = 13;
+sizes.NumContStates  = 12;
 sizes.NumDiscStates  = 0;
 sizes.NumOutputs     = 12;
 sizes.NumInputs      = 6;
@@ -85,10 +85,9 @@ x0  = [...
     MAV.u0;...
     MAV.v0;...
     MAV.w0;...
-    MAV.e0;...
-    MAV.e1;...
-    MAV.e2;...
-    MAV.e3;...
+    MAV.phi0;...
+    MAV.theta0;...
+    MAV.psi0;...
     MAV.p0;...
     MAV.q0;...
     MAV.r0;...
@@ -126,13 +125,12 @@ function sys=mdlDerivatives(t,x,uu, MAV)
     u     = x(4);
     v     = x(5);
     w     = x(6);
-    e0    = x(7);
-    e1    = x(8);
-    e2    = x(9);
-    e3    = x(10);
-    p     = x(11);
-    q     = x(12);
-    r     = x(13);
+    phi   = x(7);
+    theta= x(8);
+    psi   = x(9);
+    p     = x(10);
+    q     = x(11);
+    r     = x(12);
     fx    = uu(1);
     fy    = uu(2);
     fz    = uu(3);
@@ -140,11 +138,19 @@ function sys=mdlDerivatives(t,x,uu, MAV)
     m     = uu(5);
     n     = uu(6);
     
-    pndot = e1^2+e0^2-e2^2-e3^2*u + 2*v*(e1*e2 - e3*e0) + 2*w*(e1*e3 + e2*e0);
+    cphi = cos(phi);
+    ctheta = cos(theta);
+    cpsi = cos(psi);
+    sphi = sin(phi);
+    stheta = sin(theta);
+    spsi = sin(psi);
     
-    pedot = 2*u*(e1*e2+e3*e0)+v*(e2^2+e0^2-e1^2-e3^2) + w*2*(e2*e3-e1*e0);
     
-    pddot = u*2*(e1*e3-e2*e0) + 2*v*(e2*e3 + e1*e0) + w*(e3^2+e0^2 - e1^2 - e2^2);
+    pndot = u*ctheta*cpsi -v*(sphi*stheta*cpsi - cphi*spsi) +w*(cphi*stheta*cpsi + sphi*spsi);
+    
+    pedot = u*ctheta*spsi + v*(sphi*stheta*spsi + cphi*cpsi) + w*(cphi*stheta*spsi - sphi*cpsi);
+    
+    pddot = -stheta*u + v*sphi*ctheta + w*cphi *ctheta;
     
     udot = r*v - q*w + 1/MAV.mass*fx;
     
@@ -152,17 +158,18 @@ function sys=mdlDerivatives(t,x,uu, MAV)
     
     wdot = q*u - p*v + 1/MAV.mass*fz;
        
-    e0dot = 1/2*(-p*e1 -q*e2 -r*e3);
-    e1dot = 1/2*(p*e0 + r*e2 -q*e3);
-    e2dot = 1/2*(e0*q+e1*-r+e3*p);
-    e3dot = 1/2*(r*e0+q*e1-p*e2);
+    phidot = p + sphi*tan(theta)*q + r*cphi*tan(theta);
+    
+    thetadot = q*cphi -sphi*r;
+    
+    psidot = sphi/ctheta*q + cphi/ctheta*r;
     
     pdot = MAV.Gamma1*p*q-MAV.Gamma2*q*r+MAV.Gamma3*ell+MAV.Gamma4*n;
     qdot = MAV.Gamma5*p*r-MAV.Gamma6*(p^2-r^2) +1/MAV.Jy*m;
     rdot = MAV.Gamma7*p*q - MAV.Gamma1*q*r + MAV.Gamma4*ell + MAV.Gamma8*n;
         
 
-sys = [pndot; pedot; pddot; udot; vdot; wdot; e0dot; e1dot; e2dot; e3dot; pdot; qdot; rdot];
+sys = [pndot; pedot; pddot; udot; vdot; wdot; phidot; thetadot; psidot; pdot; qdot; rdot];
 
 % end mdlDerivatives
 
@@ -186,7 +193,6 @@ sys = [];
 %=============================================================================
 %
 function sys=mdlOutputs(t,x)
-    [phi, theta, psi] = Quaternion2Euler([x(7), x(8), x(9), x(10)]);
     y = [...
         x(1);
         x(2);
@@ -194,12 +200,12 @@ function sys=mdlOutputs(t,x)
         x(4);
         x(5);
         x(6);
-        phi;
-        theta;
-        psi;
+        x(7);
+        x(8);
+        x(9);
+        x(10);
         x(11);
         x(12);
-        x(13);
         ];
 sys = y;
 

@@ -7,7 +7,7 @@ Va = 25;
 
 
 % set initial conditions 
-x0 = 
+x0 = [0; 0; 0; Va; 0; 0; 0; gamma; 0; 0; 0; 0; 0;];
 % specify which states to hold equal to the initial conditions
 ix = [];
 
@@ -31,7 +31,7 @@ y0 = [...
 iy = [1,3];
 
 % define constant derivatives
-dx0 = 
+dx0 = [0; 0; -Va*sin(gamma); 0; 0; 0; 0; 0; Va/R; 0; 0; 0; 0];
 
 if R~=Inf, dx0(9) = Va*cos(gamma)/R; end  % 9 - psidot
 % specify which derivaties to hold constant in trim algorithm
