@@ -7,7 +7,7 @@ Va = 25;
 
 
 % set initial conditions 
-x0 = [0; 0; 0; Va; 0; 0; 0; gamma; 0; 0; 0; 0; 0;];
+x0 = [0; 0; 0; Va; 0; 0; 0; gamma; 0; 0; 0; 0];
 % specify which states to hold equal to the initial conditions
 ix = [];
 
@@ -31,7 +31,7 @@ y0 = [...
 iy = [1,3];
 
 % define constant derivatives
-dx0 = [0; 0; -Va*sin(gamma); 0; 0; 0; 0; 0; Va/R; 0; 0; 0; 0];
+dx0 = [0; 0; -Va*sin(gamma); 0; 0; 0; 0; 0; Va/R; 0; 0; 0];
 
 if R~=Inf, dx0(9) = Va*cos(gamma)/R; end  % 9 - psidot
 % specify which derivaties to hold constant in trim algorithm
@@ -39,7 +39,6 @@ idx = [3; 4; 5; 6; 7; 8; 9; 10; 11; 12];
 
 % compute trim conditions
 [x_trim,u_trim,y_trim,dx_trim] = trim('mavsim_trim',x0,u0,y0,ix,iu,iy,dx0,idx);
-
 % check to make sure that the linearization worked (should be small)
 norm(dx_trim(3:end)-dx0(3:end))
 
