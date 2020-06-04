@@ -156,27 +156,10 @@ function sys=mdlDerivatives(t,x,uu, MAV)
     e1dot = 1/2*(p*e0 + r*e2 -q*e3);
     e2dot = 1/2*(e0*q+e1*-r+e3*p);
     e3dot = 1/2*(r*e0+q*e1-p*e2);
-        
-    jx = 0.8244;
-    jy = 1.135;
-    jz = 1.759;
-    jxz = 0.1204;
     
-    g=jx*jz-jxz^2;
-    g1= (jxz*(jx-jy+jz))/g;
-    g2=(jz*(jz-jy) + jxz^2)/g;
-    g3=jz/g;
-    g4= jxz/g;
-    g5= (jz-jx)/jy;
-    g6= jxz/jy;
-    g7=((jx-jy)*jx+jxz^2)/g;
-    g8=jx/g;
-    
-    pdot = g1*p*q-g2*q*r+g3*ell+g4*n;
-    
-    qdot = g5*p*r-g6*(p^2-r^2) +1/jy*m;
-    
-    rdot = g7*p*q - g1*q*r + g4*ell + g8*n;
+    pdot = MAV.Gamma1*p*q-MAV.Gamma2*q*r+MAV.Gamma3*ell+MAV.Gamma4*n;
+    qdot = MAV.Gamma5*p*r-MAV.Gamma6*(p^2-r^2) +1/MAV.Jy*m;
+    rdot = MAV.Gamma7*p*q - MAV.Gamma1*q*r + MAV.Gamma4*ell + MAV.Gamma8*n;
         
 
 sys = [pndot; pedot; pddot; udot; vdot; wdot; e0dot; e1dot; e2dot; e3dot; pdot; qdot; rdot];
