@@ -34,6 +34,8 @@ MAV.S_prop        = 0.2027;
 MAV.rho           = 1.2682;
 MAV.e             = 0.9;
 MAV.AR            = MAV.b^2/MAV.S_wing;
+MAV.k_motor = 80;
+MAV.C_prop  = 1;
 
 % Gamma parameters from uavbook page 36
 MAV.Gamma  = MAV.Jx*MAV.Jz-MAV.Jxz^2;
