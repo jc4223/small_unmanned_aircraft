@@ -1,7 +1,7 @@
 % compute trim conditions using 'mavsim_chap5_trim.slx'
 % nominal airspeed P.Va0 specified above with aircraft parameters
-gamma = 2*pi/180;  % desired flight path angle (radians)
-R     = 5000;        % desired radius (m) - use (+) for right handed orbit, 
+gamma = 0*pi/180;  % desired flight path angle (radians)
+R     = 10000000000;        % desired radius (m) - use (+) for right handed orbit, 
                             %                          (-) for left handed orbit
 Va = 100;
 
@@ -38,10 +38,10 @@ if R~=Inf, dx0(9) = Va*cos(gamma)/R; end  % 9 - psidot
 idx = [3; 4; 5; 6; 7; 8; 9; 10; 11; 12];
 
 % compute trim conditions
-[x_trim,u_trim,y_trim,dx_trim] = trim('mavsim_trim',x0,u0,y0,ix,iu,iy,dx0,idx);
+[x_trim,u_trim,y_trim,dx_trim] = trim('mavsim_chap5',x0,u0,y0,ix,iu,iy,dx0,idx);
 display(u_trim);
 % check to make sure that the linearization worked (should be small)
-norm(dx_trim(3:end)-dx0(3:end));
+norm(dx_trim(3:end)-dx0(3:end))
 
 MAV.u_trim = u_trim;
 MAV.x_trim = x_trim;

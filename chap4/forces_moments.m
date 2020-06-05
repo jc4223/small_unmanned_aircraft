@@ -11,7 +11,6 @@
 %
 
 function out = forces_moments(x, delta, wind, P)
-
     % relabel the inputs
     pn      = x(1);
     pe      = x(2);
@@ -54,7 +53,11 @@ function out = forces_moments(x, delta, wind, P)
     alpha = atan(v_ab(3)/ v_ab(1));
     beta = asin(v_ab(2)/Va);
     
-
+    vals = [Va; alpha; beta];
+    %display(x);
+    display(delta);
+    display(vals);
+    
     % gravity forces
     f_g_x = -P.mass * P.gravity * sin(theta);
     f_g_y = P.mass * P.gravity * cos(theta) * sin(phi);
